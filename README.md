@@ -106,3 +106,45 @@ GDT-225-TheLastLight/
 ---
 
 *Updated: Week 2 — Basic shader development, M_LampGlow material with color and UV transformation*
+
+---
+
+## Week 3 - Lighting and Materials
+
+### Materials Created
+
+#### M_LighthouseStone
+A physically based material representing the rough stone exterior of the lighthouse base.
+
+| Property | Value | Purpose |
+|----------|-------|---------|
+| Base Color | R:0.35, G:0.33, B:0.30 | Neutral grey stone tone |
+| Metallic | 0.0 | Non-metal surface |
+| Roughness | 0.85 | High roughness, no shine, simulates wet stone |
+| Normal | Flat normal (R:0.5, G:0.5, B:1.0) | Surface detail baseline |
+
+#### M_LampMetal
+A physically based material representing the weathered iron lamp housing.
+
+| Property | Value | Purpose |
+|----------|-------|---------|
+| Base Color | R:0.2, G:0.2, B:0.22 | Dark grey iron tone |
+| Metallic | 1.0 | Full metal surface |
+| Roughness | 0.4 | Moderate shine, weathered but not polished |
+| Normal | Flat normal (R:0.5, G:0.5, B:1.0) | Surface detail baseline |
+
+### Lighting Adjustments
+
+| Light | Change | Purpose |
+|-------|--------|---------|
+| DirectionalLight | Color: cool blue-grey, Intensity: 2.0 lux | Simulates overcast stormy sky |
+| PointLight (new) | Color: amber, Intensity: 500 cd | Simulates beacon casting warm light |
+
+### Applied To
+- M_LighthouseStone applied to Cylinder (lighthouse base stand-in)
+- M_LampMetal applied to Cube (lamp housing stand-in)
+- Point Light positioned above Cube to cast amber beacon glow
+
+---
+
+*Updated: Week 3 — PBR materials, normal maps, and lighting adjustments*
