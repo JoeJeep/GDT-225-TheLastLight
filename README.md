@@ -148,3 +148,54 @@ A physically based material representing the weathered iron lamp housing.
 ---
 
 *Updated: Week 3 — PBR materials, normal maps, and lighting adjustments*
+
+---
+
+## Week 4 - UV Mapping and Procedural Effects
+
+### UV Mapping Updates
+
+#### M_LighthouseStone
+Added UV mapping via Texture Coordinate node to control how the Perlin noise texture tiles across the surface.
+
+| Node | Settings | Purpose |
+|------|----------|---------|
+| Texture Coordinate | UTiling: 4.0, VTiling: 4.0 | Tiles texture 4x across the stone surface |
+| Texture Sample (T_Perlin_Mask) | Color sampler | Adds surface variation |
+| Multiply | Color x Texture | Combines stone color with noise pattern |
+
+#### M_LampMetal
+Added the same UV mapping setup with tighter tiling to match the smoother metal surface.
+
+| Node | Settings | Purpose |
+|------|----------|---------|
+| Texture Coordinate | UTiling: 2.0, VTiling: 2.0 | Tiles texture 2x across the metal surface |
+| Texture Sample (T_Perlin_Mask) | Color sampler | Adds surface variation |
+| Multiply | Color x Texture | Combines metal color with noise pattern |
+
+### Procedural Effect: M_OceanWater
+
+A fully procedural animated ocean water material built using two overlapping Panner nodes driving Perlin noise textures in opposite directions. No keyframes or pre-baked animation used.
+
+| Node | Settings | Purpose |
+|------|----------|---------|
+| Texture Coordinate | Default | Provides UV input for both ripple layers |
+| Panner 1 | Speed X: 0.05, Speed Y: 0.03 | First ripple layer moving diagonally |
+| Panner 2 | Speed X: -0.03, Speed Y: 0.05 | Second ripple layer moving in opposite direction |
+| Texture Sample 1 | T_Perlin_Mask | First animated noise layer |
+| Texture Sample 2 | T_Perlin_Mask | Second animated noise layer |
+| Add | Layer 1 + Layer 2 | Blends both ripple layers together |
+| Metallic | 0.0 | Non-metal surface |
+| Roughness | 0.1 | Highly reflective, glossy water surface |
+| Normal | Add node output | Drives light reflection to simulate wave movement |
+
+### Scene Updates
+
+- Added **OceanSurface** plane (Scale X:50, Y:50) to the level, positioned at Z:50
+- Applied M_OceanWater to OceanSurface
+- Repositioned Cube and Cylinder to Z:50 to sit on the ocean surface
+- OceanSurface added to StarterAssets folder in Outliner
+
+---
+
+*Updated: Week 4 — UV mapping and procedural animated ocean water effect*
