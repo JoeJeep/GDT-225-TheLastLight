@@ -199,3 +199,39 @@ A fully procedural animated ocean water material built using two overlapping Pan
 ---
 
 *Updated: Week 4 — UV mapping and procedural animated ocean water effect*
+
+---
+
+## Week 5 - Advanced Shaders and Post-Processing
+
+### Post-Processing Volume: PostProcessVolume_Main
+
+A Post Process Volume set to Infinite Extent (Unbound) was added to apply cinematic effects across the entire level.
+
+| Effect | Setting | Purpose |
+|--------|---------|---------|
+| Bloom | Intensity: 2.0, Threshold: 0.5, Method: Standard | Makes bright light sources like the beacon bleed light into surrounding area |
+| Vignette | Intensity: 0.6 | Darkens screen edges to create enclosed stormy atmosphere |
+| Chromatic Aberration | Intensity: 0.5 | Adds color fringing around screen edges simulating a wet or damaged lens |
+
+### Stylized Shader: M_RimLight_Stone
+
+A rim lighting material applied to the Cylinder (lighthouse base stand-in). Uses a Fresnel node to create an amber glow around the silhouette edges of the object, simulating the beacon light catching the lighthouse tower against the dark stormy sky.
+
+| Node | Settings | Purpose |
+|------|---------|---------|
+| Constant3Vector | R:0.35, G:0.33, B:0.30 | Base stone color |
+| Fresnel | Exponent: 3.0, Base Reflect Fraction: 0.0 | Calculates edge glow based on camera angle |
+| Constant3Vector | R:1.0, G:0.5, B:0.1 | Amber rim light color matching beacon |
+| Multiply | Fresnel x Amber color | Combines glow intensity with color |
+| Emissive Color | Multiply output | Makes edges emit amber light |
+| Metallic | 0.0 | Non-metal surface |
+| Roughness | 0.85 | Rough stone surface |
+
+### Before and After Comparison
+
+Before Week 5 the scene had correct PBR materials and lighting but read as flat and uncinematic. The post-processing volume added bloom that makes the amber beacon glow bleed realistically into the surrounding water surface. The vignette darkens the screen edges pushing focus toward the center where the lighthouse objects sit. The chromatic aberration adds a subtle lens distortion that reinforces the stormy wet atmosphere. The rim light shader on the cylinder creates a visible silhouette glow that reads clearly as a lighthouse tower catching beacon light even with stand-in geometry.
+
+---
+
+*Updated: Week 5 — Post-processing effects and rim light stylized shader*
