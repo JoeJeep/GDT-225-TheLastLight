@@ -235,3 +235,59 @@ Before Week 5 the scene had correct PBR materials and lighting but read as flat 
 ---
 
 *Updated: Week 5 — Post-processing effects and rim light stylized shader*
+
+---
+
+## Week 6 - Shader Optimization and Profiling
+
+### Profiling Tools Used
+
+- **Shader Complexity View** (Optimization Viewmodes in viewport)
+- **Stat GPU** (console command)
+- **Material Editor Stats panel** (instruction counts)
+
+### Shader Complexity Results
+
+All materials in the scene returned green in the Shader Complexity view, indicating efficient shader cost across the entire scene with no red or orange hotspots detected.
+
+### Stat GPU Results
+
+| Metric | Avg | Max |
+|--------|-----|-----|
+| Queue Total | 0.32ms | 14.41ms |
+| Postprocessing | 3.76ms | 6.16ms |
+| Editor Primitives | 2.03ms | 5.66ms |
+| VolumetricCloud | 0.66ms | 1.02ms |
+| Lights | 0.05ms | 0.06ms |
+
+**Key finding:** Postprocessing at 3.76ms average is the highest cost item, driven by the active Bloom, Vignette, and Chromatic Aberration effects in PostProcessVolume_Main. All other costs are minimal. Lights are extremely cheap at 0.05ms despite the Point Light and Directional Light both being active.
+
+### Material Instruction Counts
+
+| Material | Instructions | Notes |
+|----------|-------------|-------|
+| M_LampGlow | 136 | Panner + noise + multiply setup |
+| M_LighthouseStone | 132 | UV mapped texture + PBR |
+| M_LampMetal | 133 | UV mapped texture + PBR |
+| M_OceanWater | 133 | Dual Panner procedural animation |
+| M_RimLight_Stone | 142 | Fresnel rim light calculation |
+
+M_RimLight_Stone is the highest at 142 due to the Fresnel node calculation. All materials are within an acceptable range for a scene of this complexity.
+
+### Optimizations Applied
+
+1. **M_OceanWater node consolidation:** Removed one redundant Texture Coordinate node, connecting a single TexCoord output to both Panner nodes instead of two separate nodes. The UE5 shader compiler optimized both versions to equivalent output, confirming the compiler performs automatic deduplication of identical node evaluations.
+
+2. **M_RimLight_Stone cleanup:** Removed explicit Metallic (0.0) and Roughness (0.85) Constant nodes. UE5's shader compiler folds constant values into the compiled shader regardless of whether they are explicit nodes or defaults, confirming no instruction count change from removing redundant constant nodes.
+
+### Key Findings and Conclusions
+
+- The scene is well optimized across all materials with no critical hotspots
+- The UE5 shader compiler handles redundant node optimization automatically during compilation
+- Post-processing is the primary GPU cost at 3.76ms, a known tradeoff for the visual quality of Bloom, Vignette, and Chromatic Aberration
+- If performance optimization were required in production, reducing Post Process effect intensity or disabling Chromatic Aberration would yield the most immediate frame time savings
+- All material instruction counts are below 150, within acceptable range for a real-time scene
+
+---
+
+*Updated: Week 6 — Shader profiling and optimization documentation*
