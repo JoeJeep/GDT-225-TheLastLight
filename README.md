@@ -291,3 +291,58 @@ M_RimLight_Stone is the highest at 142 due to the Fresnel node calculation. All 
 ---
 
 *Updated: Week 6 — Shader profiling and optimization documentation*
+
+---
+
+## Week 7 - Final Integration and Polish
+
+### Final Scene Assembly
+
+All shader, material, lighting, and procedural techniques from Weeks 1 through 6 were integrated into the final scene. The following changes were made during final polish:
+
+- Re-applied M_LampGlow to the Cube after material was lost during scene editing
+- Reduced Point Light intensity from 500 to 150 to balance bloom effect from PostProcessVolume
+- Repositioned PostProcessVolume_Main to world origin (0, 0, 0) to remove it from the active scene view while maintaining Infinite Extent Unbound coverage
+- Conducted final Stat GPU profiling pass to confirm scene stability
+
+### Final Stat GPU Results
+
+| Metric | Avg | Max |
+|--------|-----|-----|
+| Queue Total | 10.26ms | 14.90ms |
+| Postprocessing | 4.10ms | 5.70ms |
+| Editor Primitives | 3.33ms | 5.02ms |
+| VolumetricCloud | 0.87ms | 1.66ms |
+| Lights | 0.06ms | 0.38ms |
+| Fog | 0.02ms | 0.42ms |
+
+Scene performance remains stable after final integration. Postprocessing continues to be the dominant GPU cost at 4.10ms average, consistent with Week 6 findings.
+
+### Complete Material Inventory
+
+| Material | Applied To | Purpose |
+|----------|-----------|---------|
+| M_LampGlow | Cube | Animated amber lamp beacon with Perlin noise |
+| M_LampMetal | (stand-in) | Weathered iron lamp housing PBR |
+| M_LighthouseStone | Cylinder | Rough stone lighthouse base PBR |
+| M_RimLight_Stone | Cylinder | Fresnel rim light stylized shader |
+| M_OceanWater | OceanSurface plane | Procedural dual-Panner animated water |
+
+### Final Scene Elements
+
+| Element | Type | Purpose |
+|---------|------|---------|
+| DirectionalLight | Lighting | Cool blue-grey stormy sky at 2.0 lux |
+| PointLight | Lighting | Amber beacon glow at 150 cd |
+| PostProcessVolume_Main | Post-processing | Bloom, Vignette, Chromatic Aberration |
+| OceanSurface | Mesh | Scaled 50x50 plane with animated water material |
+| Cube | Mesh | Lamp housing stand-in |
+| Cylinder | Mesh | Lighthouse base stand-in |
+| Landscape | Terrain | Open world terrain with stormy atmosphere |
+
+### Repository
+Final project: https://github.com/JoeJeep/GDT-225-TheLastLight
+
+---
+
+*Updated: Week 7 — Final integration, polish, and project completion*
